@@ -1,0 +1,18 @@
+# 夫婦向け献立アプリ — 開発タスク
+
+- [x] **Phase 1-4: MVP基盤** — 完了済み
+- [x] **買い物リスト修正** — レシピ+材料同時保存、ページ遷移
+- [x] **レシピURL材料自動抽出**
+  - [x] cheerio インストール
+  - [x] API Route `/api/parse-recipe` 作成（JSON-LD + DOM解析）
+  - [x] レシピ登録画面に「URLから取得」ボタン追加
+- [x] **Supabase連携**
+  - [x] `@supabase/supabase-js` インストール
+  - [x] 環境変数 ([.env.local](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/.env.local)) 設定
+  - [x] AppContext 同期ロジック実装（Realtime対応）
+- [x] **献立選び直し不具合の修正**
+- [/] **PWA設定**
+  - [ ] アプリアイコンの生成
+  - [ ] `manifest.ts` の作成
+  - [ ] メタデータ（テーマカラー等）の設定
+- [ ] **UI改善**

@@ -1,0 +1,18 @@
+# 夫婦向け献立アプリ — 開発タスク
+
+- [ ] **Phase 1: デザインシステム & レイアウト基盤**
+  - [ ] globals.css にカラーパレット・タイポグラフィ・アニメーション変数を設定
+  - [ ] layout.tsx にメタデータ日本語化・Noto Sans JP・下部タブナビ配置
+- [ ] **Phase 2: データモデル & 状態管理**
+  - [ ] types/index.ts に型定義
+  - [ ] hooks/useAppState.ts に Context + useReducer + localStorage
+- [ ] **Phase 3: 画面実装**
+  - [ ] ホーム画面（今日の献立 + 👍/👎評価UI）
+  - [ ] レシピ登録画面
+  - [ ] 買い物リスト画面
+- [ ] **Phase 4: コアロジック**
+  - [ ] menuLogic.ts（献立決定アルゴリズム）
+  - [ ] shoppingMerge.ts（材料マージ）
+- [ ] **検証**
+  - [ ] ユニットテスト
+  - [ ] ブラウザ動作確認

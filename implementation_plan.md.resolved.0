@@ -1,0 +1,88 @@
+# 夫婦向け献立アプリ — 開発進捗と再開計画
+
+## 現在の開発進捗
+
+| フェーズ | ステータス | 詳細 |
+|---------|-----------|------|
+| 1. 要件定義・基本設計 | ✅ 完了 | 要件整理済み、設計書作成済み |
+| 2. プロジェクトセットアップ | 🔶 一部完了 | Next.js + Tailwind CSS v4 プロジェクト初期化済み。ただし中身はデフォルトテンプレートのまま |
+| 3. UI/UXモックアップ実装 | ❌ 未着手 | — |
+| 4. コアロジック実装 | ❌ 未着手 | — |
+| 5. URL解析・買い物リスト生成 | ❌ 未着手 | — |
+| 6. ブラッシュアップ・テスト | ❌ 未着手 | — |
+
+### 完了済みの成果物
+- [implementation_plan.md](file:///C:/Users/nishi/.gemini/antigravity/brain/04a53f0c-acdb-427f-b447-c76988a9ba9d/implementation_plan.md) — 設計書（データモデル、画面構成、技術選定）
+- `couple_menu_app/` — Next.js 16 + Tailwind CSS v4 プロジェクト（初期テンプレート状態）
+
+> [!IMPORTANT]
+> 前回の会話では「技術スタック・アーキテクチャの設計」をレビュー待ちの状態で終了しています。以下の前提で開発を再開してよいかご確認ください。
+> 1. **フレームワーク**: Next.js（PWA対応）— 既に初期化済み
+> 2. **スタイリング**: Tailwind CSS v4 — 既に導入済み
+> 3. **バックエンド/DB**: まずはバックエンド連携なし（ローカルステート / `localStorage`）でUIとロジックを完成させ、後からSupabase等を統合する段階的アプローチ
+> 4. **プロジェクトパス**: `C:\Users\nishi\.gemini\antigravity\scratch\couple_menu_app`
+
+---
+
+## 開発再開 — 実装計画
+
+### Phase 1: デザインシステム & レイアウト基盤
+
+#### [MODIFY] [globals.css](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/app/globals.css)
+- モバイルファーストのカラーパレット（温かみのあるグラデーション配色）
+- タイポグラフィ（日本語対応：Noto Sans JP）
+- アニメーション用CSS変数
+
+#### [MODIFY] [layout.tsx](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/app/layout.tsx)
+- メタデータの日本語化、PWA用viewport設定
+- Google Fonts（Noto Sans JP）の読み込み
+- 下部タブナビゲーション（ホーム / レシピ登録 / 買い物リスト）を共通レイアウトとして配置
+
+---
+
+### Phase 2: データモデル & 状態管理
+
+#### [NEW] [src/types/index.ts](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/types/index.ts)
+- `Recipe`, `RecipeEvaluation`, `Ingredient`, `ShoppingItem` 等の型定義
+
+#### [NEW] [src/hooks/useAppState.ts](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/hooks/useAppState.ts)
+- React Context + useReducer によるグローバル状態管理（MVP は `localStorage` 永続化）
+- レシピCRUD、評価（👍/👎）、献立決定ロジック、買い物リスト生成ロジック
+
+---
+
+### Phase 3: 画面実装
+
+#### [MODIFY] [page.tsx](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/app/page.tsx)
+- **ホーム画面**: 「今日の献立」カード表示 + 候補レシピの👍/👎評価UI（カードスワイプ or ボタン）
+
+#### [NEW] [src/app/recipes/page.tsx](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/app/recipes/page.tsx)
+- **レシピ登録画面**: レシピ名・URL・カテゴリの入力フォーム、登録済みレシピ一覧
+
+#### [NEW] [src/app/shopping/page.tsx](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/app/shopping/page.tsx)
+- **買い物リスト画面**: チェックボックス付きリスト、チェック済みアイテムの自動下部移動
+
+---
+
+### Phase 4: コアロジック
+
+#### [NEW] [src/lib/menuLogic.ts](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/lib/menuLogic.ts)
+- 献立決定アルゴリズム（両者👍 > 片方👍+未評価 > 👎含むものは除外）
+
+#### [NEW] [src/lib/shoppingMerge.ts](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/lib/shoppingMerge.ts)
+- 同一材料の自動マージ・数量加算ロジック
+
+---
+
+## Verification Plan
+
+### Automated Tests
+- `menuLogic.ts` と `shoppingMerge.ts` のユニットテストを Vitest で作成
+- コマンド: `npx vitest run`
+
+### ブラウザによる動作確認
+- `npm run dev` で開発サーバーを起動し、ブラウザのモバイルエミュレーション（375px幅）で以下を確認
+  1. 下部タブナビゲーションの切り替え
+  2. レシピ登録 → 一覧表示
+  3. 👍/👎 評価操作とホーム画面への反映
+  4. 買い物リストの生成・チェック操作

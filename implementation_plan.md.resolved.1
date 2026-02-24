@@ -1,0 +1,53 @@
+# Supabase連携の実装プラン
+
+ブラウザの `localStorage` で保存していたデータを Supabase (PostgreSQL) に移行し、夫婦間でリアルタイムに共有できるようにします。
+
+## データベース設計 (Schema)
+
+以下のテーブルを Supabase 上に作成します。
+
+### `recipes` テーブル
+- [id](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/lib/menuLogic.ts#3-57) (uuid, primary key)
+- `name` (text, not null)
+- `url` (text)
+- `category` (text)
+- `created_at` (timestamp with time zone)
+- `group_id` (text) -- 夫婦を識別するID
+
+### `ingredients` テーブル
+- [id](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/lib/menuLogic.ts#3-57) (uuid, primary key)
+- `recipe_id` (uuid, references recipes.id)
+- `name` (text, not null)
+- `quantity` (text)
+- `unit` (text)
+
+### `evaluations` テーブル
+- `recipe_id` (uuid, references recipes.id)
+- `user_id` (text) -- "user1" or "user2"
+- `status` (text) -- "like", "dislike", "none"
+- Primary Key: (`recipe_id`, `user_id`)
+
+### `shopping_items` テーブル
+- [id](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/lib/menuLogic.ts#3-57) (uuid, primary key)
+- `name` (text, not null)
+- `quantity` (text)
+- `unit` (text)
+- `checked` (boolean, default false)
+- `group_id` (text)
+
+## 実装ステップ
+
+### 1. 環境設定
+- `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` と `NEXT_PUBLIC_SUPABASE_ANON_KEY` を設定
+- `src/lib/supabase.ts` でクライアントを初期化
+
+### 2. データ同期ロジックの変更
+- [AppContext.tsx](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/contexts/AppContext.tsx) の `useReducer` はそのままに、副作用 (`useEffect`) で Supabase との同期（Read/Write）を行う
+- `Realtime` 機能を有効にし、片方の端末での変更がもう片方に即座に反映されるようにする
+
+### 3. 初期移行
+- 既存の `localStorage` データを初回起動時に Supabase へアップロードする処理を追加
+
+## ユーザーへのお願い
+1. Supabase のプロジェクトを作成し、URLとAnon Keyを取得してください。
+2. 以下の SQL (後ほど提示) を SQL Editor で実行して、テーブルを作成してください。

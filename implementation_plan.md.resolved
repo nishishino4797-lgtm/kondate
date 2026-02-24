@@ -1,0 +1,22 @@
+# 共有・デプロイの実装プラン
+
+本アプリをパートナーや他のユーザーと共有するための手順と、技術的な準備をまとめます。
+
+## 1. Vercel へのデプロイ (推奨)
+Next.js アプリをインターネット上に公開する最も簡単な方法です。
+
+- **手順**:
+  1. GitHub にソースコードをプッシュします。
+  2. [Vercel](https://vercel.com/) にログインし、リポジトリをインポートします。
+  3. **Environment Variables** に [.env.local](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/.env.local) の内容（SupabaseのURLとAnon Key）を設定します。
+  4. 「Deploy」ボタンを押すと、URL（`https://xxx.vercel.app`）が発行されます。
+
+## 2. 他のカップルとの共存対応 (グループIDの動的化)
+現状は `GROUP_ID` が `couple1` に固定されているため、デプロイしたURLを誰が使っても同じデータを見てしまいます。これを解決するために、URLパラメータでグループを切り替えられるようにします。
+
+- **変更点**:
+  - [AppContext.tsx](file:///C:/Users/nishi/.gemini/antigravity/scratch/couple_menu_app/src/contexts/AppContext.tsx) の `GROUP_ID` を、URLのクエリパラメータ（例: `?group=my-family`）または `localStorage` から取得するように修正します。
+  - パラメータがない場合はデフォルトの `couple1` を使用します。
+
+## 3. PWAのインストール
+- デプロイされたURLをスマホ（Safari/Chrome）で開き、「ホーム画面に追加」を行うことで、双方の端末でアプリとして利用可能になります。

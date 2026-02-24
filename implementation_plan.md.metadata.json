@@ -1,0 +1,6 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary":  "Vercelへのデプロイ手順と、複数ユーザー/カップルが独立して利用できるようにするためのグループID動的化（URLクエリパラメータ対応）の実装プラン。",
+  "updatedAt":  "2026-02-23T15:36:56.677463800Z",
+  "version":  "5"
+}

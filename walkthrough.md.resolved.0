@@ -1,0 +1,52 @@
+# 夫婦向け献立アプリ — ウォークスルー
+
+## 実装した内容
+
+### ファイル構成
+```
+couple_menu_app/src/
+├── app/
+│   ├── globals.css          ← デザインシステム
+│   ├── layout.tsx           ← PWA対応レイアウト + タブナビ
+│   ├── page.tsx             ← ホーム画面
+│   ├── recipes/page.tsx     ← レシピ登録画面
+│   └── shopping/page.tsx    ← 買い物リスト画面
+├── components/
+│   └── TabNavigation.tsx    ← 下部タブナビゲーション
+├── contexts/
+│   └── AppContext.tsx       ← グローバル状態管理 (localStorage永続化)
+├── lib/
+│   ├── menuLogic.ts         ← 献立決定アルゴリズム
+│   └── shoppingMerge.ts     ← 材料マージロジック
+└── types/
+    └── index.ts             ← 型定義
+```
+
+### 各画面の機能
+
+| 画面 | 主な機能 |
+|------|---------|
+| **ホーム** (`/`) | 今日の献立表示、レシピ候補の👍/👎評価、献立決定ボタン、ユーザー切替 |
+| **レシピ** (`/recipes`) | レシピ登録（名前・URL・カテゴリ）、一覧表示、削除 |
+| **買い物** (`/shopping`) | チェックボックスリスト、進捗バー、手動追加、全完了表示 |
+
+### コアロジック
+- **献立決定**: 両者👍 > 片方👍+未評価 > 未評価（👎含むレシピは除外）
+- **材料マージ**: 同一名称+同一単位の材料を自動合算（分数対応）
+
+## 検証結果
+
+- ✅ **Next.js ビルド成功** — 全3ページ正常コンパイル、型エラーなし
+- ⚠️ ブラウザ動作確認は Chrome 未インストールのためスキップ
+
+## 起動方法
+```
+cd C:\Users\nishi\.gemini\antigravity\scratch\couple_menu_app
+npm run dev
+```
+→ http://localhost:3000 をスマホ幅のブラウザで開く
+
+## 今後のステップ
+1. ブラウザで実際の動作確認・UIの微調整
+2. レシピURLからの材料自動抽出機能（API Routes）
+3. Supabase連携（夫婦間リアルタイム共有）
